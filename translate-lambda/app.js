@@ -23,11 +23,11 @@ exports.lambdaHandler = async (event, context) => {
     }
 };
 
-function respond(requestId){
+function respond(responseData){
     return {
         'statusCode': 200,
         'body': JSON.stringify({
-            'data': requestId
+            'data': responseData
         }),
         'headers': {
             "Content-Type": "application/json",

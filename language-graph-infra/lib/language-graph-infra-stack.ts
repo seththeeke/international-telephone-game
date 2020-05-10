@@ -26,11 +26,15 @@ export class LanguageGraphInfrastructureStack extends cdk.Stack {
 
     translateLambda.addToRolePolicy(translatePolicy);
 
-    const publicApiGateway = new apigateway.RestApi(this, "PublicApi");
+    const publicApiGateway = new apigateway.RestApi(this, "PublicApi", {
+      defaultCorsPreflightOptions: {
+        allowOrigins: apigateway.Cors.ALL_ORIGINS
+      }
+    });
     publicApiGateway.root.addMethod('ANY');
 
     const translateLambdaResource = publicApiGateway.root.addResource('translate');
     const translateLambdaIntegration = new apigateway.LambdaIntegration(translateLambda);
-    translateLambdaResource.addMethod('POST', translateLambdaIntegration);
+    translateLambdaResource.addMethod('PUT', translateLambdaIntegration);
   }
 }
