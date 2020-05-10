@@ -2,12 +2,12 @@ version = 0.1
 [default]
 [default.deploy]
 [default.deploy.parameters]
-stack_name = "RubeGoldbergServerlessWebsite"
+stack_name = "InternationalTelephoneWebsite"
 s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-ft1mrb98gkma"
-s3_prefix = "RubeGoldbergServerlessWebsite"
+s3_prefix = "InternationTelephoneWebsite"
 region = "us-east-1"
 profile = "rgm"
 confirm_changeset = true
 capabilities = "CAPABILITY_IAM"
-parameter_overrides = "S3StaticWebsiteBucketNameParameter=\"rubegoldbergserverless.com\" DomainNameParameter=\"rubegoldbergserverless.com\" HostedZoneNameParameter=\"rubegoldbergserverless.com.\""
+parameter_overrides = "S3StaticWebsiteBucketNameParameter=\"internationaltelephone.com\" DomainNameParameter=\"internationaltelephone.com\" HostedZoneNameParameter=\"internationaltelephone.com.\""
 
