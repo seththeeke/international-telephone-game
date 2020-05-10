@@ -6,7 +6,11 @@ class Home extends React.Component {
       super(props);
       this.state = {
          options: [],
-         translatedText: ""
+         translatedText: "",
+         sourceLabel: "Source Language",
+         targetLabel: "Target Language",
+         translateButtonText: "Translate",
+         textToTranslatePlaceholder: "Text to Translate"
       }
 
       this.translateText = this.translateText.bind(this);
@@ -251,17 +255,17 @@ class Home extends React.Component {
       let textToTranslate = document.getElementById("textToTranslate").value;
       let sourceLanguageCode = document.getElementById("sourceLanguageOption").value;
       let targetLanguageCode = document.getElementById("targetLanguageOption").value;
-      // this.props.translateService.translateText(textToTranslate, sourceLanguageCode, targetLanguageCode).then(function(response){
-      //    this.setState({
-      //       translatedText: response.data.TranslatedText
-      //    });
-      // }.bind(this), function(error){
-      //    console.log(error);
-      // });
-
-      this.setState({
-         translatedText: "Some Translated Text"
+      this.props.translateService.translateText(textToTranslate, sourceLanguageCode, targetLanguageCode).then(function(response){
+         this.setState({
+            translatedText: response.data.translatedText.TranslatedText
+         });
+      }.bind(this), function(error){
+         console.log(error);
       });
+
+      // this.setState({
+      //    translatedText: "Some Translated Text"
+      // });
    }
 
    render() {
@@ -269,21 +273,23 @@ class Home extends React.Component {
          <div className='home-container'>
             <div>
                <div>
-                  <label>Source Language</label>
-                  <select id="sourceLanguageOption">
-                     {this.state.options}
-                  </select>
+                  <div className="language-select-container">
+                     <div className="language-select-label">{this.state.sourceLabel}</div>
+                     <select className="language-select" id="sourceLanguageOption">
+                        {this.state.options}
+                     </select>
+                  </div>
+                  <div className="language-select-container">
+                     <div className="language-select-label">{this.state.targetLabel}</div>
+                     <select className="language-select" id="targetLanguageOption">
+                        {this.state.options}
+                     </select>
+                  </div>
                </div>
-               <div>
-                  <label>Target Language</label>
-                  <select id="targetLanguageOption">
-                     {this.state.options}
-                  </select>
-               </div>
-               <input id="textToTranslate" type="text" placeholder="Text To Translate"></input>
+               <input id="textToTranslate" className="text-to-translate-input" type="text" placeholder={this.state.textToTranslatePlaceholder}></input>
             </div>
             <div>
-               <button onClick={this.translateText}>Translate</button>
+               <button onClick={this.translateText}>{this.state.translateButtonText}</button>
             </div>
             <div>{this.state.translatedText}</div>
          </div>

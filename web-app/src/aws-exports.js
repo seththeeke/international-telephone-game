@@ -4,7 +4,7 @@ const awsmobile = {
         endpoints: [
             {
                 name: "TranslateService",
-                endpoint: "https://mp0wxnyd69.execute-api.us-east-1.amazonaws.com/prod"
+                endpoint: "https://vevqwy7lee.execute-api.us-east-1.amazonaws.com/prod"
             }
         ]
     }
