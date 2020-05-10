@@ -13,7 +13,6 @@ class TranslateService {
       }
     }
     return this.amplifyRequestService.request(this.apiName, '/translate', "PUT", languageParams);
-    // return this.amplifyRequestService.request(this.apiName, '/translate', "PUT");
   }
 
 }
