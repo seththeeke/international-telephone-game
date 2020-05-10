@@ -9,19 +9,100 @@ exports.lambdaHandler = async (event, context) => {
         let text = requestBody.text;
         let sourceLanguageCode = requestBody.sourceLanguageCode || "auto";
         let targetLanguageCode = requestBody.targetLanguageCode;
-        console.log(text + " " + sourceLanguageCode + " " + targetLanguageCode);
+
+        let canMakeRequestResult = await canMakeRequest(text);
+        console.log("Make request resulted in " + JSON.stringify(canMakeRequestResult));
+        if (!canMakeRequestResult) {
+            return error("Request exceeds amazon translate limit for text " + text);
+        }
+
         var params = {
             SourceLanguageCode: sourceLanguageCode,
             TargetLanguageCode: targetLanguageCode,
             Text: requestBody.text,
         };
         let translatedText = await translate.translateText(params).promise();
-        return respond(translatedText);
+        return respond({
+            translatedText: translatedText,
+            canMakeRequestResult: canMakeRequestResult
+        });
     } catch (err) {
         console.log(err);
         return error(err);
     }
 };
+
+/**
+ * Amazon Translate is expensive so this checks a table that stores a limited number of translations per month
+ * and will deny the request if it reaches the limit, sorry but I'm not made of money...
+ */
+async function canMakeRequest(textToTranslate){
+    console.log("Validating that translate request can be made for text " + textToTranslate);
+    let amazonTranslateLimitTableName = process.env.AMAZON_TRANSLATE_LIMIT_TABLE_NAME;
+    let amazonTranslateLimit = parseInt(process.env.AMAZON_TRANSLATE_MONTHLY_CHARACTER_LIMIT);
+    let currMonth = new Date().getMonth();
+
+    let dynamoDb = new AWS.DynamoDB({apiVersion: '2012-08-10'});
+    let scanParams = {
+        TableName: amazonTranslateLimitTableName
+    }
+    let scanResult = await dynamoDb.scan(scanParams).promise();
+    console.log("Received scan result for limit objects " + JSON.stringify(scanResult));
+    let thisMonthsLimit = undefined;
+    for (let item of scanResult.Items) {
+        if (item.month.N !== currMonth.toString()) {
+            let deleteParams = {
+                Key: {
+                    "month": {
+                        N: parseInt(item.month.N)
+                    }
+                }, 
+                TableName: amazonTranslateLimitTableName
+            }
+            console.log("Deleting row with params " + JSON.stringify(deleteParams));
+            await dynamoDb.deleteItem(deleteParams).promise();
+        } else {
+            thisMonthsLimit = item;
+        }
+    }
+    console.log("Received scan result from initial limit check " + JSON.stringify(thisMonthsLimit));
+    if (!thisMonthsLimit){
+        console.log("No limit yet created for this month, creating one now for month " + currMonth);
+        let createItemParams = {
+            TableName: amazonTranslateLimitTableName,
+            Item: {
+                "month": {
+                    N: currMonth.toString()
+                },
+                "characterCount": {
+                    N: "0"
+                }
+            }, 
+        }
+        console.log("Creating limit object with params " + JSON.stringify(createItemParams));
+        thisMonthsLimit = await dynamoDb.putItem(createItemParams).promise();
+    }
+
+    if (parseInt(thisMonthsLimit.characterCount.N) + textToTranslate.length > amazonTranslateLimit){
+        console.log("Request would exceed limit for amazon translate requests for the month of " + currMonth);
+        return false;
+    }
+
+    let updateItemParams = {
+        TableName: amazonTranslateLimitTableName,
+        Item: {
+            "month": {
+                N: currMonth.toString()
+            },
+            "characterCount": {
+                N: (parseInt(thisMonthsLimit.characterCount.N) + textToTranslate.length).toString()
+            }
+        }, 
+    }
+    console.log("Updating limit object with params " + JSON.stringify(updateItemParams));
+    await dynamoDb.putItem(updateItemParams).promise();
+    return (parseInt(thisMonthsLimit.characterCount.N) + textToTranslate.length).toString();
+}
 
 function respond(responseData){
     return {

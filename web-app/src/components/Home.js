@@ -251,12 +251,16 @@ class Home extends React.Component {
       let textToTranslate = document.getElementById("textToTranslate").value;
       let sourceLanguageCode = document.getElementById("sourceLanguageOption").value;
       let targetLanguageCode = document.getElementById("targetLanguageOption").value;
-      this.props.translateService.translateText(textToTranslate, sourceLanguageCode, targetLanguageCode).then(function(response){
-         this.setState({
-            translatedText: response.data.TranslatedText
-         });
-      }.bind(this), function(error){
-         console.log(error);
+      // this.props.translateService.translateText(textToTranslate, sourceLanguageCode, targetLanguageCode).then(function(response){
+      //    this.setState({
+      //       translatedText: response.data.TranslatedText
+      //    });
+      // }.bind(this), function(error){
+      //    console.log(error);
+      // });
+
+      this.setState({
+         translatedText: "Some Translated Text"
       });
    }
 
