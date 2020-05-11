@@ -87,8 +87,11 @@ class Home extends React.Component {
             isTranslating: false
          });
       }.bind(this), function(error){
-         console.log(error);
-      });
+         this.setState({
+            translateLimitExceeded: true,
+            isTranslating: false
+         });
+      }.bind(this));
    }
 
    updateWebsiteLanguageCode(){
@@ -128,7 +131,7 @@ class Home extends React.Component {
                <div>
                   <img className="app-logo" src={logo}></img>
                </div>
-               <div hidden={!this.translateLimitExceeded}>
+               <div className="limit-exceeded-container" hidden={!this.state.translateLimitExceeded}>
                   {this.state.translateLimitExceededText}
                </div>
                <div>

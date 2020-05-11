@@ -35,3 +35,8 @@
 .page-spinner-container {
     padding: 100px;
 }
+
+.limit-exceeded-container {
+    width: 500px;
+    display: inline-block;
+}
