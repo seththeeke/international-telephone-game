@@ -3,7 +3,6 @@ version = 0.1
 [default.deploy]
 [default.deploy.parameters]
 stack_name = "InternationalTelephoneGameWebsite"
-s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-ft1mrb98gkma"
 s3_prefix = "InternationTelephoneGameWebsite"
 region = "us-east-1"
 profile = "itg"

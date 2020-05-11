@@ -131,8 +131,10 @@ class Home extends React.Component {
                <div>
                   <img className="app-logo" src={logo}></img>
                </div>
-               <div className="limit-exceeded-container" hidden={!this.state.translateLimitExceeded}>
-                  {this.state.translateLimitExceededText}
+               <div hidden={!this.state.translateLimitExceeded}>
+                  <div className="limit-exceeded-container" >
+                     {this.state.translateLimitExceededText}
+                  </div>
                </div>
                <div>
                   <div>
