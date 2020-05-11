@@ -1,6 +1,7 @@
 import React from 'react';
 import './../css/Home.css';
-import AddIcon from '@material-ui/icons/Add'
+import AddIcon from '@material-ui/icons/Add';
+import RotateLeftIcon from '@material-ui/icons/RotateLeft';
 
 import logo from '../img/logo.png';
 
@@ -48,7 +49,8 @@ class Home extends React.Component {
             textToTranslatePlaceholder: this.appConfig.textToTranslatePlaceholder.S,
             websiteLanguageSelectionLabel: this.appConfig.websiteLanguageSelectionLabel.S,
             updateWebsiteLanguageButtonText: this.appConfig.updateWebsiteLanguageButtonText.S,
-            appLanguageCode: languageCode
+            appLanguageCode: languageCode,
+            additionalTranslations: []
          });
       }.bind(this));
    }
@@ -133,7 +135,7 @@ class Home extends React.Component {
                      {this.state.additionalTranslations}
                   </div>
                   <div className="add-language-container" onClick={this.addAdditionalLanguage}>
-                     <AddIcon></AddIcon>
+                     <AddIcon className="icon-button"></AddIcon>
                   </div>
                   <div className="language-select-container">
                      <div className="language-select-label">{this.state.targetLabel}</div>
@@ -148,6 +150,9 @@ class Home extends React.Component {
             </div>
             <div>
                <button className="primary-button" onClick={this.translateText}>{this.state.translateButtonText}</button>
+               <div onClick={this.updateWebsiteLanguageCode}>
+                  <RotateLeftIcon className="icon-button"></RotateLeftIcon>
+               </div>
             </div>
          </div>
       );
