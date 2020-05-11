@@ -10,245 +10,43 @@ class Home extends React.Component {
          sourceLabel: "Source Language",
          targetLabel: "Target Language",
          translateButtonText: "Translate",
-         textToTranslatePlaceholder: "Text to Translate"
+         textToTranslatePlaceholder: "Text to Translate",
+         websiteLanguageSelectionLabel: "Website Language Selection",
+         updateWebsiteLanguageButtonText: "Update Website Language Code",
+         appLanguageCode: "en"
       }
 
       this.translateText = this.translateText.bind(this);
-
-      this.languageCodes = [
-         {
-            "label": "Afrikaans",
-            "code": "af"
-         },
-         {
-            "label": "Albanian",
-            "code": "sq"
-         },
-         {
-            "label": "Amharic",
-            "code": "am"
-         },
-         {
-            "label": "Arabic",
-            "code": "ar"
-         },
-         {
-            "label": "Azerbaijani",
-            "code": "az"
-         },
-         {
-            "label": "Bengali",
-            "code": "bn"
-         },
-         {
-            "label": "Bosnian",
-            "code": "bs"
-         },
-         {
-            "label": "Bulgarian",
-            "code": "bq"
-         },
-         {
-            "label": "Chinese (Simplified)",
-            "code": "zh"
-         },
-         {
-            "label": "Chinese (Traditional)",
-            "code": "zh-TW"
-         },
-         {
-            "label": "Croatian",
-            "code": "hr"
-         },
-         {
-            "label": "Czech",
-            "code": "cs"
-         },
-         {
-            "label": "Danish",
-            "code": "da"
-         },
-         {
-            "label": "Dari",
-            "code": "fa-AF"
-         },
-         {
-            "label": "Dutch",
-            "code": "nl"
-         },
-         {
-            "label": "English",
-            "code": "en"
-         },
-         {
-            "label": "Estonian",
-            "code": "et"
-         },
-         {
-            "label": "Finnish",
-            "code": "fi"
-         },
-         {
-            "label": "French",
-            "code": "fr"
-         },
-         {
-            "label": "French (Canada)",
-            "code": "fr-CA"
-         },
-         {
-            "label": "Georgian",
-            "code": "ka"
-         },
-         {
-            "label": "German",
-            "code": "de"
-         },
-         {
-            "label": "Greek",
-            "code": "el"
-         },
-         {
-            "label": "Hause",
-            "code": "ha"
-         },
-         {
-            "label": "Hebrew",
-            "code": "he"
-         },
-         {
-            "label": "Hindi",
-            "code": "hi"
-         },
-         {
-            "label": "Hungarian",
-            "code": "hu"
-         },
-         {
-            "label": "Indonesian",
-            "code": "id"
-         },
-         {
-            "label": "Italian",
-            "code": "it"
-         },
-         {
-            "label": "Japenese",
-            "code": "ja"
-         },
-         {
-            "label": "Korean",
-            "code": "ko"
-         },
-         {
-            "label": "Latvian",
-            "code": "lv"
-         },
-         {
-            "label": "Malay",
-            "code": "ms"
-         },
-         {
-            "label": "Norwegian",
-            "code": "no"
-         },
-         {
-            "label": "Persian",
-            "code": "fa"
-         },
-         {
-            "label": "Pashto",
-            "code": "ps"
-         },
-         {
-            "label": "Polish",
-            "code": "pl"
-         },
-         {
-            "label": "Portuguese",
-            "code": "pt"
-         },
-         {
-            "label": "Romanian",
-            "code": "ro"
-         },
-         {
-            "label": "Russian",
-            "code": "ru"
-         },
-         {
-            "label": "Serbian",
-            "code": "sr"
-         },
-         {
-            "label": "Slovak",
-            "code": "sk"
-         },
-         {
-            "label": "Slovenian",
-            "code": "sl"
-         },
-         {
-            "label": "Somali",
-            "code": "so"
-         },
-         {
-            "label": "Spanish",
-            "code": "es"
-         },
-         {
-            "label": "Spanish (Mexico)",
-            "code": "es-MX"
-         },
-         {
-            "label": "Swahili",
-            "code": "sw"
-         },
-         {
-            "label": "Swedish",
-            "code": "sv"
-         },
-         {
-            "label": "Tagalog",
-            "code": "tl"
-         },
-         {
-            "label": "Tamil",
-            "code": "ta"
-         },
-         {
-            "label": "Thai",
-            "code": "th"
-         },
-         {
-            "label": "Turkish",
-            "code": "tr"
-         },
-         {
-            "label": "Ukrainian",
-            "code": "uk"
-         },
-         {
-            "label": "Urdu",
-            "code": "ur"
-         },
-         {
-            "label": "Vietnamese",
-            "code": "vi"
-         },
-      ]
+      this.setupApp = this.setupApp.bind(this);
+      this.updateWebsiteLanguageCode = this.updateWebsiteLanguageCode.bind(this);
    }
 
    componentDidMount(){
-      let languageOptions = [];
-      for (let languageOption of this.languageCodes){
-         languageOptions.push(
-            <option key={languageOption.code} value={languageOption.code}>{languageOption.label}</option> 
-         );
-      }
-      this.setState({
-         options: languageOptions
-      });
+      this.setupApp(this.state.appLanguageCode);
+   }
+
+   setupApp(languageCode){
+      this.props.appConfigService.getAppConfig(languageCode).then(function(response){
+         this.appConfig = response.data.Items[0];
+         let languageOptionsForCode = this.appConfig.options.L;
+         let languageOptions = [];
+         for (let languageOption of languageOptionsForCode){
+            languageOptions.push(
+               <option key={languageOption.M.code.S} value={languageOption.M.code.S}>{languageOption.M.label.S}</option> 
+            );
+         }
+         console.log(this.appConfig);
+         this.setState({
+            options: languageOptions,
+            sourceLabel: this.appConfig.sourceLabel.S,
+            targetLabel: this.appConfig.targetLabel.S,
+            translateButtonText: this.appConfig.translateButtonText.S,
+            textToTranslatePlaceholder: this.appConfig.textToTranslatePlaceholder.S,
+            websiteLanguageSelectionLabel: this.appConfig.websiteLanguageSelectionLabel.S,
+            updateWebsiteLanguageButtonText: this.appConfig.updateWebsiteLanguageButtonText.S,
+            appLanguageCode: languageCode
+         });
+      }.bind(this));
    }
 
    translateText(){
@@ -268,10 +66,23 @@ class Home extends React.Component {
       // });
    }
 
+   updateWebsiteLanguageCode(){
+      this.setupApp(document.getElementById("websiteLanguageCodeOption").value);
+   }
+
    render() {
       return (
          <div className='home-container'>
             <div>
+               <div>
+                  <div className="language-select-container">
+                     <div className="language-select-label">{this.state.websiteLanguageSelectionLabel}</div>
+                     <select className="language-select" id="websiteLanguageCodeOption">
+                        {this.state.options}
+                     </select>
+                  </div>
+                  <button onClick={this.updateWebsiteLanguageCode}>{this.state.updateWebsiteLanguageButtonText}</button>
+               </div>
                <div>
                   <div className="language-select-container">
                      <div className="language-select-label">{this.state.sourceLabel}</div>

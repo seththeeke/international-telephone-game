@@ -13,6 +13,7 @@ class AppRouter extends React.Component {
                     <Route path="/">
                         <Home
                             translateService={this.props.translateService}
+                            appConfigService={this.props.appConfigService}
                         >
                         </Home>
                     </Route>
