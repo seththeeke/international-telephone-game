@@ -95,7 +95,7 @@ class Home extends React.Component {
                         {this.state.options}
                      </select>
                      <div>
-                        <input className="text-to-translate-input" type="text" placeholder={this.state.translatedText}></input>
+                        <input className="text-to-translate-input" type="text" placeholder={this.state.translatedText} disabled></input>
                      </div>
                   </div>
                </div>
