@@ -29,7 +29,7 @@ class App extends React.Component {
             translateService={this.translateService}
             appConfigService={this.appConfigService}
           ></AppRouter>
-          <a target="_blank" rel="noopener noreferrer" href="https://www.github.com/seththeeke/rube-goldberg-serverless">
+          <a target="_blank" rel="noopener noreferrer" href="https://www.github.com/seththeeke/language-graph">
             <img className="icon" alt="github" src={github}></img>
           </a>
         </Router>
