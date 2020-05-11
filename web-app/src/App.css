@@ -1,8 +1,6 @@
 .App {
   text-align: center;
-  /* background: linear-gradient(to bottom, rgb(255,153,0) 0%, rgb(255,153,0) 100%); */
-  /* background:rgb(255, 236, 209); */
-  background: white;
+  background: #F5F5F5;
   min-height: 740px;
   min-width: 800px;
 }
@@ -29,17 +27,17 @@ button:hover {
 }
 
 .primary-button {
-  background-color: #152028;
+  background-color: #364E6B;
   color: white;
-  border: 1px solid #152028;
+  border: 1px solid #364E6B;
   display: inline-flex;
   align-items: center;
 }
 
 .primary-button:hover {
   background-color: white;
-  color: #152028;
-  border: 1px solid white;
+  color: #364E6B;
+  border: 1px solid #364E6B;
 }
 
 .secondary-button {
@@ -54,20 +52,6 @@ button:hover {
   background-color: white;
   color: #828B92;
   border: 1px solid white;
-}
-
-.text-input {
-  padding: 10px;
-  margin: 10px 10px 0px 10px;
-  outline: none;
-  width: 200px;
-  background-color: white;
-  border-radius: 4px;
-  border: none;
-}
-
-.text-input:focus {
-  outline: none;
 }
 
 .icon-button {

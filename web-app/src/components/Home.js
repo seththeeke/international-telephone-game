@@ -1,6 +1,8 @@
 import React from 'react';
 import './../css/Home.css';
 
+import logo from '../img/logo.png';
+
 class Home extends React.Component {
    constructor(props){
       super(props);
@@ -68,7 +70,9 @@ class Home extends React.Component {
    render() {
       return (
          <div className='home-container'>
-            <div>International Telephone Game!</div>
+            <div>
+               <img className="app-logo" src={logo}></img>
+            </div>
             <div>
                <div>
                   <div className="language-select-container">
@@ -77,7 +81,7 @@ class Home extends React.Component {
                         {this.state.options}
                      </select>
                   </div>
-                  <button onClick={this.updateWebsiteLanguageCode}>{this.state.updateWebsiteLanguageButtonText}</button>
+                  <button className="primary-button" onClick={this.updateWebsiteLanguageCode}>{this.state.updateWebsiteLanguageButtonText}</button>
                </div>
                <div>
                   <div className="language-select-container">
@@ -101,7 +105,7 @@ class Home extends React.Component {
                </div>
             </div>
             <div>
-               <button onClick={this.translateText}>{this.state.translateButtonText}</button>
+               <button className="primary-button" onClick={this.translateText}>{this.state.translateButtonText}</button>
             </div>
          </div>
       );
