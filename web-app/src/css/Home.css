@@ -1,3 +1,7 @@
+.additional-languages-container {
+    display: inline-block;
+}
+
 .language-select-container {
     padding: 15px;
     display: inline-block;
@@ -22,4 +26,8 @@
 .app-logo {
     height: 215px;
     width: auto;
+}
+
+.add-language-container {
+    display: inline-block;
 }
