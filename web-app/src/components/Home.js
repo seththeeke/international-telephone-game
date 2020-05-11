@@ -21,7 +21,8 @@ class Home extends React.Component {
          appLanguageCode: "en",
          additionalTranslations: [],
          isLoadingWebsite: true,
-         isTranslating: false
+         isTranslating: false,
+         translateLimitExceeded: false
       }
 
       this.translateText = this.translateText.bind(this);
@@ -52,6 +53,7 @@ class Home extends React.Component {
             textToTranslatePlaceholder: this.appConfig.textToTranslatePlaceholder.S,
             websiteLanguageSelectionLabel: this.appConfig.websiteLanguageSelectionLabel.S,
             updateWebsiteLanguageButtonText: this.appConfig.updateWebsiteLanguageButtonText.S,
+            translateLimitExceededText: this.appConfig.translateLimitExceededText.S,
             appLanguageCode: languageCode,
             additionalTranslations: [],
             isLoadingWebsite: false
@@ -125,6 +127,9 @@ class Home extends React.Component {
             <div hidden={this.state.isLoadingWebsite}>
                <div>
                   <img className="app-logo" src={logo}></img>
+               </div>
+               <div hidden={!this.translateLimitExceeded}>
+                  {this.state.translateLimitExceededText}
                </div>
                <div>
                   <div>

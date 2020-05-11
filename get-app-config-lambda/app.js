@@ -23,6 +23,7 @@ exports.lambdaHandler = async (event, context) => {
             let translatedTranslateButtonText = await translateText(englishAppConfig.translateButtonText.S, englishLanguageCode, languageCode);
             let translatedUpdateWebsiteLanguageButtonText = await translateText(englishAppConfig.updateWebsiteLanguageButtonText.S, englishLanguageCode, languageCode);
             let translatedWebsiteLanguageSelectionLabel = await translateText(englishAppConfig.websiteLanguageSelectionLabel.S, englishLanguageCode, languageCode);
+            let translatedTranslateLimitExceededText = await translateText(englishAppConfig.translateLimitExceededText.S, englishLanguageCode, languageCode);
             let enOptions = englishAppConfig.options.L;
             let translatedOptions = [];
             for (let enOption of enOptions) {
@@ -32,7 +33,7 @@ exports.lambdaHandler = async (event, context) => {
                     label: translatedLanguageLabel
                 });
             }
-            await addAppConfig(languageCode, translatedSourceLabel, translatedTargetLabel, translatedTextToTranslatePlaceholder, translatedTranslateButtonText, translatedOptions, translatedUpdateWebsiteLanguageButtonText, translatedWebsiteLanguageSelectionLabel);
+            await addAppConfig(languageCode, translatedSourceLabel, translatedTargetLabel, translatedTextToTranslatePlaceholder, translatedTranslateButtonText, translatedOptions, translatedUpdateWebsiteLanguageButtonText, translatedWebsiteLanguageSelectionLabel, translatedTranslateLimitExceededText);
             appConfig = await getAppConfigForLanguageCode(languageCode);
         }
 
@@ -70,7 +71,7 @@ async function translateText(text, sourceLanguageCode, targetLanguageCode) {
     return translatedTextResponse.TranslatedText;
 }
 
-async function addAppConfig(languageCode, sourceLabel, targetLabel, textToTranslatePlaceholder, translateButtonText, options, translatedUpdateWebsiteLanguageButtonText, translatedWebsiteLanguageSelectionLabel) {
+async function addAppConfig(languageCode, sourceLabel, targetLabel, textToTranslatePlaceholder, translateButtonText, options, translatedUpdateWebsiteLanguageButtonText, translatedWebsiteLanguageSelectionLabel, translatedTranslateLimitExceededText) {
     let dynamoDb = new AWS.DynamoDB({apiVersion: '2012-08-10'});
     let optionsArray = [];
     for (let option of options) {
@@ -108,6 +109,9 @@ async function addAppConfig(languageCode, sourceLabel, targetLabel, textToTransl
             },
             "websiteLanguageSelectionLabel": {
                 S: translatedWebsiteLanguageSelectionLabel
+            },
+            "translateLimitExceededText": {
+                S: translatedTranslateLimitExceededText
             },
             "options": {
                 L: optionsArray

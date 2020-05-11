@@ -6,6 +6,7 @@
     "translateButtonText": "Translate",
     "updateWebsiteLanguageButtonText": "Update Website Language Code",
     "websiteLanguageSelectionLabel": "Website Language Selection",
+    "translateLimitExceededText": "Sorry, this website uses a translation API and it can be very expensive so I have limited the number of translations to 1,000,000 per month. If you would like to request that it be extended or manually overriden, please email seththeeke@gmail.com.",
     "options": [
         {
            "label": "Afrikaans",
