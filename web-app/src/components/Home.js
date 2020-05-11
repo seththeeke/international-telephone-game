@@ -35,7 +35,6 @@ class Home extends React.Component {
                <option key={languageOption.M.code.S} value={languageOption.M.code.S}>{languageOption.M.label.S}</option> 
             );
          }
-         console.log(this.appConfig);
          this.setState({
             options: languageOptions,
             sourceLabel: this.appConfig.sourceLabel.S,
@@ -60,10 +59,6 @@ class Home extends React.Component {
       }.bind(this), function(error){
          console.log(error);
       });
-
-      // this.setState({
-      //    translatedText: "Some Translated Text"
-      // });
    }
 
    updateWebsiteLanguageCode(){
@@ -73,6 +68,7 @@ class Home extends React.Component {
    render() {
       return (
          <div className='home-container'>
+            <div>International Telephone Game!</div>
             <div>
                <div>
                   <div className="language-select-container">
@@ -89,20 +85,24 @@ class Home extends React.Component {
                      <select className="language-select" id="sourceLanguageOption">
                         {this.state.options}
                      </select>
+                     <div>
+                        <input id="textToTranslate" className="text-to-translate-input" type="text" placeholder={this.state.textToTranslatePlaceholder}></input>
+                     </div>
                   </div>
                   <div className="language-select-container">
                      <div className="language-select-label">{this.state.targetLabel}</div>
                      <select className="language-select" id="targetLanguageOption">
                         {this.state.options}
                      </select>
+                     <div>
+                        <input className="text-to-translate-input" type="text" placeholder={this.state.translatedText}></input>
+                     </div>
                   </div>
                </div>
-               <input id="textToTranslate" className="text-to-translate-input" type="text" placeholder={this.state.textToTranslatePlaceholder}></input>
             </div>
             <div>
                <button onClick={this.translateText}>{this.state.translateButtonText}</button>
             </div>
-            <div>{this.state.translatedText}</div>
          </div>
       );
    }
