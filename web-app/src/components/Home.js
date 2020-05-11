@@ -2,6 +2,7 @@ import React from 'react';
 import './../css/Home.css';
 import AddIcon from '@material-ui/icons/Add';
 import RotateLeftIcon from '@material-ui/icons/RotateLeft';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import logo from '../img/logo.png';
 
@@ -18,7 +19,9 @@ class Home extends React.Component {
          websiteLanguageSelectionLabel: "Website Language Selection",
          updateWebsiteLanguageButtonText: "Update Website Language Code",
          appLanguageCode: "en",
-         additionalTranslations: []
+         additionalTranslations: [],
+         isLoadingWebsite: true,
+         isTranslating: false
       }
 
       this.translateText = this.translateText.bind(this);
@@ -50,12 +53,16 @@ class Home extends React.Component {
             websiteLanguageSelectionLabel: this.appConfig.websiteLanguageSelectionLabel.S,
             updateWebsiteLanguageButtonText: this.appConfig.updateWebsiteLanguageButtonText.S,
             appLanguageCode: languageCode,
-            additionalTranslations: []
+            additionalTranslations: [],
+            isLoadingWebsite: false
          });
       }.bind(this));
    }
 
    async translateText(){
+      this.setState({
+         isTranslating: true
+      });
       let sourceTextToTranslate = document.getElementById("textToTranslate").value;
       let startLanguageCode = document.getElementById("sourceLanguageOption").value;
       let currTextToTranslate = sourceTextToTranslate;
@@ -74,7 +81,8 @@ class Home extends React.Component {
 
       this.props.translateService.translateText(currTextToTranslate, currLanguageCode, targetLanguageCode).then(function(response){
          this.setState({
-            translatedText: response.data.translatedText.TranslatedText
+            translatedText: response.data.translatedText.TranslatedText,
+            isTranslating: false
          });
       }.bind(this), function(error){
          console.log(error);
@@ -82,6 +90,9 @@ class Home extends React.Component {
    }
 
    updateWebsiteLanguageCode(){
+      this.setState({
+         isLoadingWebsite: true
+      });
       this.setupApp(document.getElementById("websiteLanguageCodeOption").value);
    }
 
@@ -108,50 +119,58 @@ class Home extends React.Component {
    render() {
       return (
          <div className='home-container'>
-            <div>
-               <img className="app-logo" src={logo}></img>
+            <div className="page-spinner-container" hidden={!this.state.isLoadingWebsite}>
+               <CircularProgress></CircularProgress>
             </div>
-            <div>
+            <div hidden={this.state.isLoadingWebsite}>
                <div>
-                  <div className="language-select-container">
-                     <div className="language-select-label">{this.state.websiteLanguageSelectionLabel}</div>
-                     <select className="language-select" id="websiteLanguageCodeOption">
-                        {this.state.options}
-                     </select>
-                  </div>
-                  <button className="primary-button" onClick={this.updateWebsiteLanguageCode}>{this.state.updateWebsiteLanguageButtonText}</button>
+                  <img className="app-logo" src={logo}></img>
                </div>
                <div>
-                  <div className="language-select-container">
-                     <div className="language-select-label">{this.state.sourceLabel}</div>
-                     <select className="language-select" id="sourceLanguageOption">
-                        {this.state.options}
-                     </select>
-                     <div>
-                        <input id="textToTranslate" className="text-to-translate-input" type="text" placeholder={this.state.textToTranslatePlaceholder}></input>
+                  <div>
+                     <div className="language-select-container">
+                        <div className="language-select-label">{this.state.websiteLanguageSelectionLabel}</div>
+                        <select className="language-select" id="websiteLanguageCodeOption">
+                           {this.state.options}
+                        </select>
                      </div>
+                     <button className="primary-button" onClick={this.updateWebsiteLanguageCode}>{this.state.updateWebsiteLanguageButtonText}</button>
                   </div>
-                  <div className="additional-languages-container">
-                     {this.state.additionalTranslations}
-                  </div>
-                  <div className="add-language-container" onClick={this.addAdditionalLanguage}>
-                     <AddIcon className="icon-button"></AddIcon>
-                  </div>
-                  <div className="language-select-container">
-                     <div className="language-select-label">{this.state.targetLabel}</div>
-                     <select className="language-select" id="targetLanguageOption">
-                        {this.state.options}
-                     </select>
-                     <div>
-                        <input className="text-to-translate-input" type="text" placeholder={this.state.translatedText} disabled></input>
+                  <div>
+                     <div className="language-select-container">
+                        <div className="language-select-label">{this.state.sourceLabel}</div>
+                        <select className="language-select" id="sourceLanguageOption">
+                           {this.state.options}
+                        </select>
+                        <div>
+                           <input id="textToTranslate" className="text-to-translate-input" type="text" placeholder={this.state.textToTranslatePlaceholder}></input>
+                        </div>
+                     </div>
+                     <div className="additional-languages-container">
+                        {this.state.additionalTranslations}
+                     </div>
+                     <div className="add-language-container" onClick={this.addAdditionalLanguage}>
+                        <AddIcon className="icon-button"></AddIcon>
+                     </div>
+                     <div className="language-select-container">
+                        <div className="language-select-label">{this.state.targetLabel}</div>
+                        <select className="language-select" id="targetLanguageOption">
+                           {this.state.options}
+                        </select>
+                        <div>
+                           <input className="text-to-translate-input" type="text" placeholder={this.state.translatedText} disabled></input>
+                        </div>
                      </div>
                   </div>
                </div>
-            </div>
-            <div>
-               <button className="primary-button" onClick={this.translateText}>{this.state.translateButtonText}</button>
-               <div onClick={this.updateWebsiteLanguageCode}>
-                  <RotateLeftIcon className="icon-button"></RotateLeftIcon>
+               <div hidden={!this.state.isTranslating}>
+                  <CircularProgress />
+               </div>
+               <div>
+                  <button className="primary-button" onClick={this.translateText}>{this.state.translateButtonText}</button>
+                  <div onClick={this.updateWebsiteLanguageCode}>
+                     <RotateLeftIcon className="icon-button"></RotateLeftIcon>
+                  </div>
                </div>
             </div>
          </div>

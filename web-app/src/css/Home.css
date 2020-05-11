@@ -31,3 +31,7 @@
 .add-language-container {
     display: inline-block;
 }
+
+.page-spinner-container {
+    padding: 100px;
+}
