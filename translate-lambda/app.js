@@ -54,7 +54,7 @@ async function canMakeRequest(textToTranslate){
             let deleteParams = {
                 Key: {
                     "month": {
-                        N: parseInt(item.month.N)
+                        N: item.month.N.toString()
                     }
                 }, 
                 TableName: amazonTranslateLimitTableName
@@ -80,9 +80,18 @@ async function canMakeRequest(textToTranslate){
             }, 
         }
         console.log("Creating limit object with params " + JSON.stringify(createItemParams));
-        thisMonthsLimit = await dynamoDb.putItem(createItemParams).promise();
+        let newLimitResult = await dynamoDb.putItem(createItemParams).promise();
+        thisMonthsLimit = {
+            "month": {
+                N: currMonth.toString()
+            },
+            "characterCount": {
+                N: "0"
+            }
+        };
     }
 
+    console.log("Current month's limit is " + JSON.stringify(thisMonthsLimit));
     if (parseInt(thisMonthsLimit.characterCount.N) + textToTranslate.length > amazonTranslateLimit){
         console.log("Request would exceed limit for amazon translate requests for the month of " + currMonth);
         return false;
